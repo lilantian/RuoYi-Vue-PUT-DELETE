@@ -4,11 +4,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -48,7 +46,7 @@ public class SysMenuController extends BaseController
      * 根据菜单编号获取详细信息
      */
     @PreAuthorize("@ss.hasPermi('system:menu:query')")
-    @GetMapping(value = "/{menuId}")
+    @GetMapping(value = "/getInfo/{menuId}")
     public AjaxResult getInfo(@PathVariable Long menuId)
     {
         return success(menuService.selectMenuById(menuId));
@@ -82,7 +80,7 @@ public class SysMenuController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:menu:add')")
     @Log(title = "菜单管理", businessType = BusinessType.INSERT)
-    @PostMapping
+    @PostMapping("/add")
     public AjaxResult add(@Validated @RequestBody SysMenu menu)
     {
         if (!menuService.checkMenuNameUnique(menu))
@@ -102,7 +100,7 @@ public class SysMenuController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:menu:edit')")
     @Log(title = "菜单管理", businessType = BusinessType.UPDATE)
-    @PutMapping
+    @PostMapping("/edit")
     public AjaxResult edit(@Validated @RequestBody SysMenu menu)
     {
         if (!menuService.checkMenuNameUnique(menu))
@@ -126,7 +124,7 @@ public class SysMenuController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('system:menu:remove')")
     @Log(title = "菜单管理", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{menuId}")
+    @PostMapping("/remove/{menuId}")
     public AjaxResult remove(@PathVariable("menuId") Long menuId)
     {
         if (menuService.hasChildByMenuId(menuId))

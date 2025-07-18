@@ -10,11 +10,9 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -67,7 +65,7 @@ public class GenController extends BaseController
      * 获取代码生成信息
      */
     @PreAuthorize("@ss.hasPermi('tool:gen:query')")
-    @GetMapping(value = "/{tableId}")
+    @GetMapping(value = "/getInfo/{tableId}")
     public AjaxResult getInfo(@PathVariable Long tableId)
     {
         GenTable table = genTableService.selectGenTableById(tableId);
@@ -163,7 +161,7 @@ public class GenController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('tool:gen:edit')")
     @Log(title = "代码生成", businessType = BusinessType.UPDATE)
-    @PutMapping
+    @PostMapping("/editSave")
     public AjaxResult editSave(@Validated @RequestBody GenTable genTable)
     {
         genTableService.validateEdit(genTable);
@@ -176,7 +174,7 @@ public class GenController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('tool:gen:remove')")
     @Log(title = "代码生成", businessType = BusinessType.DELETE)
-    @DeleteMapping("/{tableIds}")
+    @PostMapping("/remove/{tableIds}")
     public AjaxResult remove(@PathVariable Long[] tableIds)
     {
         genTableService.deleteGenTableByIds(tableIds);
